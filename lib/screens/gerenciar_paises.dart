@@ -11,12 +11,13 @@ class GerenciarPaisesScreen extends StatefulWidget {
 class _GerenciarPaisesScreenState extends State<GerenciarPaisesScreen> {
   final List<Color> _coresDisponiveis = [
     Colors.red,
-    Colors.green,
+    Colors.lightGreen,
     Colors.blue,
-    Colors.yellow,
+    Colors.amber,
     Colors.orange,
     Colors.purple,
     Colors.brown,
+    Colors.teal,
   ];
 
   @override

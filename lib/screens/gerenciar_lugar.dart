@@ -28,10 +28,11 @@ class _GerenciarLugaresScreenState extends State<GerenciarLugaresScreen> {
                 return Card(
                   margin: EdgeInsets.all(10),
                   child: ListTile(
-                    leading: Image.network(lugar.imagemUrl),
+                    leading: Icon(Icons.event_note), // Ícone de evento padrão do Flutter
                     title: Text(lugar.titulo),
                     subtitle: Text(
-                        'Avaliação: ${lugar.avaliacao} | Custo: ${lugar.custoMedio}'),
+                      'Avaliação: ${lugar.avaliacao} | Custo: ${lugar.custoMedio}'
+                    ),
                     trailing: Row(
                       mainAxisSize: MainAxisSize.min,
                       children: [

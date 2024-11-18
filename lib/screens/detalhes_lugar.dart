@@ -1,9 +1,8 @@
-import 'package:flutter/material.dart';
+import 'package:flutter/material.dart'; 
 import 'package:provider/provider.dart';
 import 'package:cached_network_image/cached_network_image.dart';
-import '../provider/paises_provider.dart';
+import '../provider/favoritos_provider.dart';
 import '../model/lugar.dart';
-import '../model/pais.dart';
 
 class DetalhesLugarScreen extends StatelessWidget {
   const DetalhesLugarScreen({super.key});
@@ -11,12 +10,12 @@ class DetalhesLugarScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final lugar = ModalRoute.of(context)?.settings.arguments as Lugar;
-    final paisesProvider = Provider.of<PaisesProvider>(context);
-    final List<String> paisesDoLugar = lugar.paises;
+    final favoritosProvider = Provider.of<FavoritosProvider>(context);
+    final bool isFavorito = favoritosProvider.lugaresFavoritos.contains(lugar);
 
     return Scaffold(
       appBar: AppBar(
-        backgroundColor: Theme.of(context).primaryColor,
+        backgroundColor: ThemeData().primaryColor,
         title: Text(
           lugar.titulo,
           style: const TextStyle(color: Colors.white),
@@ -24,7 +23,6 @@ class DetalhesLugarScreen extends StatelessWidget {
       ),
       body: Column(
         children: <Widget>[
-          // Imagem do lugar
           Container(
             height: 300,
             width: double.infinity,
@@ -42,74 +40,25 @@ class DetalhesLugarScreen extends StatelessWidget {
               width: double.infinity,
             ),
           ),
-
-          // Título "Países"
-          Container(
-            margin: const EdgeInsets.symmetric(vertical: 10),
-            child: Text(
-              'Países Associados',
-              style: Theme.of(context).textTheme.titleLarge, // Substituição aqui
-            ),
-          ),
-
-          // Lista de países
-          Container(
-            width: 350,
-            height: 150,
-            padding: const EdgeInsets.all(10),
-            margin: const EdgeInsets.all(10),
-            decoration: BoxDecoration(
-              color: Colors.white,
-              border: Border.all(color: Colors.grey),
-              borderRadius: BorderRadius.circular(10),
-            ),
-            child: ListView.builder(
-              itemCount: paisesDoLugar.length,
-              itemBuilder: (context, index) {
-                final pais = paisesDoLugar[index];
-                return Column(
-                  children: <Widget>[
-                    ListTile(
-                      leading: Icon(
-                        Icons.location_on,
-                        color: Theme.of(context).colorScheme.secondary,
-                      ),
-                      title: Text(pais),
-                      onTap: () {
-                        // Exibe detalhes do país ou realiza alguma ação
-                        print('País selecionado: $pais');
-                      },
-                    ),
-                    const Divider(),
-                  ],
-                );
-              },
-            ),
-          ),
-
-          // Título "Dicas"
           Container(
             margin: const EdgeInsets.symmetric(vertical: 10),
             child: Text(
               'Dicas',
-              style: Theme.of(context).textTheme.titleLarge, // Substituição aqui
+              style: ThemeData().textTheme.displayLarge,
             ),
           ),
-
-          // Lista de recomendações
           Container(
             width: 350,
-            height: 150,
+            height: 300,
             padding: const EdgeInsets.all(10),
             margin: const EdgeInsets.all(10),
             decoration: BoxDecoration(
-              color: Colors.white,
-              border: Border.all(color: Colors.grey),
-              borderRadius: BorderRadius.circular(10),
-            ),
+                color: Colors.white,
+                border: Border.all(color: Colors.grey),
+                borderRadius: BorderRadius.circular(10)),
             child: ListView.builder(
               itemCount: lugar.recomendacoes.length,
-              itemBuilder: (context, index) {
+              itemBuilder: (contexto, index) {
                 return Column(
                   children: <Widget>[
                     ListTile(
@@ -131,18 +80,9 @@ class DetalhesLugarScreen extends StatelessWidget {
           )
         ],
       ),
-      // Ação no botão flutuante (exemplo: adicionar/remover países relacionados)
       floatingActionButton: FloatingActionButton(
-        onPressed: () {
-          // Exemplo de funcionalidade: adicionar ou editar países associados ao lugar
-          paisesProvider.adicionarPais(
-            Pais(
-              id: DateTime.now().toString(),
-              titulo: "Novo País", // Adicione o título desejado
-            ),
-          );
-        },
-        child: const Icon(Icons.add_location),
+        onPressed: () => favoritosProvider.toggleLugarFavorito(lugar),
+        child: Icon(isFavorito ? Icons.star : Icons.star_border),
       ),
     );
   }
